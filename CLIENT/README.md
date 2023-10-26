@@ -49,6 +49,36 @@ https://tailwindcss.com/docs/guides/vite
 
 .....npm run dev
 
-5.Adding plugins and dependencies.......
+### Adding plugins and dependencies.......
 
 .......... npm install @reduxjs/toolkit react-redux react-router-dom react-icons react-chartjs-2 chart.js daisyui axios react-hot-toast @tailwindcss/line-clamp
+
+#### Adding auto import sort for eslint
+
+1.Install the plugin.....
+
+.....npm install eslint-plugin-simple-import-sort
+# then only eslint start detecting plugins.
+
+2.Update plugins in eslint file.....
+
+......  plugins: ['react-refresh', 'simple-import-sort'],
+
+
+# rules to specify what is an error and what is not.
+
+3.Update rules in eslint file......
+
+.........rules: {
+    'simple-import-sort/imports':'error',
+    'react-refresh/only-export-components': [
+      'warn',
+      { allowConstantExport: true },
+    ]}
+
+
+4.Change settings in VScode : open settings.json in VScode and ad follwing snippet in the json file.......
+
+...... "editor.codeActionsOnSave": {
+        "source.fixAll.eslint": true
+    }
