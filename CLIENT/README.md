@@ -82,3 +82,7 @@ https://tailwindcss.com/docs/guides/vite
 ...... "editor.codeActionsOnSave": {
         "source.fixAll.eslint": true
     }
+
+5.Add daysyui plugin to tailwind.config file...........
+
+.......  plugins: [require("daisyui")].
