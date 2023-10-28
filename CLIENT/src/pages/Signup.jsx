@@ -2,32 +2,68 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import HomeLayout from "../layouts/HomeLayout";
 import { BsPersonCircle } from "react-icons/bs";
-import {toast} from 'react-hot-toast';
+import { toast } from "react-hot-toast";
+import { isEmail, isValidPassword } from "../helper/regexMatcher";
 
 function Signup() {
   const navigate = useNavigate();
 
   const [signupDetails, setSignupDetails] = useState({
     email: "",
-    fullname: "",
+    fullName: "",
     password: "",
     avatar: "",
   });
 
   const [previewImage, setPreviewImage] = useState("");
 
-  function onFormSubmit(e){
-    e.preventDefault();
-    if(!signupDetails.email || !signupDetails.password || !signupDetails.fullname || !signupDetails.avatar){
-        toast.error("Please fill all the details");
+  function handleUserInput(e) {
+    const { name, value } = e.target;
+    setSignupDetails({
+      ...signupDetails,
+      [name]: value,
+    });
+  }
 
-        return
+  function handleImage(e) {
+    e.preventDefault();
+    const uploadedImage = e.target.files[0]; //since it is a single file, it is available at 0th index.
+    if (!uploadedImage) return;
+    setSignupDetails({ ...signupDetails, avatar: uploadedImage });
+
+    const fileReader = new FileReader();
+    fileReader.readAsDataURL(uploadedImage);
+    fileReader.addEventListener("load",function(){
+      setPreviewImage(this.result);
+    })
+  }
+
+
+  function onFormSubmit(e) {
+    e.preventDefault();
+    if (
+      !signupDetails.email ||
+      !signupDetails.password ||
+      !signupDetails.fullName
+    ) {
+      toast.error("Please fill all the details");
+
+      return;
     }
-    if(signupDetails.fullname.length<5){
-        toast.error("Name should be atleast of 5 characters");
-        return;
+    if (signupDetails.fullName.length < 5) {
+      toast.error("Name should be atleast of 5 characters");
+      return;
     }
-    
+    if (!isEmail(signupDetails.email)) {
+      toast.error("Invalid Email");
+      return;
+    }
+    if (!isValidPassword(signupDetails.password)) {
+      toast.error(
+        "Password must be atleast 8 characters, should contain atleast one uppercase and lowercase letters , one numeric and a special character "
+      );
+      return;
+    }
   }
   return (
     <HomeLayout>
@@ -53,17 +89,20 @@ function Signup() {
             type="file"
             className="hidden"
             name="image_uploads"
+            onChange={handleImage}
             id="image_uploads"
-            accept=".jpg .jpeg .png .svg"
+            accept=".jpg, .jpeg, .png, .svg"
           />
           <div className="flex flex-col gap-1">
             <label htmlFor="fullName" className="font-semibold">
               Name
             </label>
             <input
+              onChange={handleUserInput}
               className="bg-transparent px-2 py-1 border"
               type="text"
               name="fullName"
+              value={signupDetails.fullName}
               id="fullName"
               placeholder="Username"
               required
@@ -74,6 +113,8 @@ function Signup() {
               Email
             </label>
             <input
+              onChange={handleUserInput}
+              value={signupDetails.email}
               className="bg-transparent px-2 py-1 border"
               type="email"
               name="email"
@@ -87,6 +128,8 @@ function Signup() {
               Password
             </label>
             <input
+              onChange={handleUserInput}
+              value={signupDetails.password}
               className="bg-transparent px-2 py-1 border"
               type="password"
               name="password"
