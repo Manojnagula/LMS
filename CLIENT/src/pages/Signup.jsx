@@ -75,7 +75,6 @@ function Signup() {
 
 
     const response = await dispatch(createAccount(formData));
-    console.log(response);
 
     if (response?.payload?.data?.success) {
       navigate("/");
@@ -166,10 +165,10 @@ function Signup() {
             Create Account
           </button>
           <p className="text-center ">
-            Already have an account?{" "}
+            Already have an account?
             <Link
               className="cursor-pointer text-accent font-medium"
-              to="/login"
+              to="/signin"
             >
               Login
             </Link>
