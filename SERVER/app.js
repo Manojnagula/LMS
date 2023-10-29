@@ -9,22 +9,24 @@ import courseRoutes from "./routes/course.routes.js";
 import paymentsRoutes from "./routes/payment.routes.js";
 
 const app = express();
+
+app.use(morgan("dev"));
+
+app.use(
+  cors({
+    origin: process.env.FRONTEND_URL,
+    credentials: true,
+  })
+);
 app.use(
   bodypParser.urlencoded({
     extended: true,
   })
 );
-
 app.use(express.json());
-app.use(
-  cors({
-    origin: [process.env.FRONTEND_URL],
-    credentials: true,
-  })
-);
+
 app.use(cookieParser());
 
-app.use(morgan("dev"));
 
 app.use("/ping", (req, res) => {
   res.send("pong");

@@ -4,9 +4,12 @@ import HomeLayout from "../layouts/HomeLayout";
 import { BsPersonCircle } from "react-icons/bs";
 import { toast } from "react-hot-toast";
 import { isEmail, isValidPassword } from "../helper/regexMatcher";
+import { useDispatch } from "react-redux";
+import { createAccount } from "../redux/slices/authSlice";
 
 function Signup() {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const [signupDetails, setSignupDetails] = useState({
     email: "",
@@ -39,7 +42,7 @@ function Signup() {
   }
 
 
-  function onFormSubmit(e) {
+  async function onFormSubmit(e) {
     e.preventDefault();
     if (
       !signupDetails.email ||
@@ -64,7 +67,22 @@ function Signup() {
       );
       return;
     }
+
+      const response  = await dispatch(createAccount(signupDetails));
+      console.log(response);
+      if(response?.payload?.success){
+        navigate("/")
+      }
+      setSignupDetails({
+        email: "",
+        fullName: "",
+        password: "",
+        avatar: "",
+      })
+      setPreviewImage("");
+
   }
+
   return (
     <HomeLayout>
       <div className="flex overflow-auto items-center justify-center h-[100vh]">
