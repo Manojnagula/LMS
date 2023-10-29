@@ -36,11 +36,10 @@ function Signup() {
 
     const fileReader = new FileReader();
     fileReader.readAsDataURL(uploadedImage);
-    fileReader.addEventListener("load",function(){
+    fileReader.addEventListener("load", function () {
       setPreviewImage(this.result);
-    })
+    });
   }
-
 
   async function onFormSubmit(e) {
     e.preventDefault();
@@ -68,19 +67,26 @@ function Signup() {
       return;
     }
 
-      const response  = await dispatch(createAccount(signupDetails));
-      console.log(response);
-      if(response?.payload?.success){
-        navigate("/")
-      }
-      setSignupDetails({
-        email: "",
-        fullName: "",
-        password: "",
-        avatar: "",
-      })
-      setPreviewImage("");
+    const formData = new FormData();
+    formData.append('fullName', signupDetails.fullName);
+    formData.append('avatar', signupDetails.avatar);
+    formData.append('email', signupDetails.email);
+    formData.append('password', signupDetails.password);
 
+
+    const response = await dispatch(createAccount(formData));
+    console.log(response);
+
+    if (response?.payload?.data?.success) {
+      navigate("/");
+    }
+    setSignupDetails({
+      email: "",
+      fullName: "",
+      password: "",
+      avatar: "",
+    });
+    setPreviewImage("");
   }
 
   return (
