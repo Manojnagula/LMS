@@ -3,14 +3,14 @@ import Footer from "../components/Footer";
 import { FiMenu } from "react-icons/fi";
 import { AiFillCloseCircle } from "react-icons/ai";
 import { useDispatch, useSelector } from "react-redux";
+import { logout } from "../redux/slices/authSlice";
 
 function HomeLayout({ children }) {
-
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const isLoggedIn = useSelector((state)=>state?.auth?.isLoggedIn);
-  const role = useSelector((state)=>state?.auth?.role)
+  const isLoggedin = useSelector((state) => state?.auth?.isLoggedin);
+  const role = useSelector((state) => state?.auth?.role);
 
   function changeWidth() {
     const drawerSide = document.getElementsByClassName("drawer-side");
@@ -24,13 +24,11 @@ function HomeLayout({ children }) {
     drawerSide[0].style.width = "0";
   }
 
-  function onLogout(e){
-//todo
-
-e.preventDefault();
-
-//todo
-navigate("/")
+  async function onLogout(e) {
+    e.preventDefault();
+    const response = await dispatch(logout());
+      if(response?.payload?.data)
+      navigate("/");
   }
 
   return (
@@ -57,7 +55,7 @@ navigate("/")
             <li>
               <Link to="/">Home</Link>
             </li>
-            {isLoggedIn && role === 'ADMIN' && (
+            {isLoggedin && role === "ADMIN" && (
               <li>
                 <Link to="/admin/dashboard">Admin Dashboard</Link>
               </li>
@@ -72,7 +70,7 @@ navigate("/")
               <Link to="/courses">All Courses</Link>
             </li>
 
-            { !isLoggedIn? (
+            {!isLoggedin? (
               <li className="absolute bottom-4 w-[90%]">
                 <div className="w-full flex items-center justify-center">
                   <button className="btn-primary px-4 py-1 font-semibold rounded-md w-full ">
@@ -83,25 +81,23 @@ navigate("/")
                   </button>
                 </div>
               </li>
-            ) : (
+            ):(
               <li className="absolute bottom-4 w-[90%]">
-              <div className="w-full flex items-center justify-center">
-                <button className="btn-primary px-4 py-1 font-semibold rounded-md w-full ">
-                  <Link to="/user/profile">profile</Link>
-                </button>
-                <button className="btn-secondary px-4 py-1 font-semibold rounded-md w-full ">
-                  <Link onClick={onLogout}>Logout</Link>
-                </button>
-              </div>
-            </li>
-            )
-          }
-
+                <div className="w-full flex items-center justify-center">
+                  <button className="btn-primary px-4 py-1 font-semibold rounded-md w-full ">
+                    <Link to="/user/profile">profile</Link>
+                  </button>
+                  <button className="btn-secondary px-4 py-1 font-semibold rounded-md w-full ">
+                    <Link onClick={onLogout}>Logout</Link>
+                  </button>
+                </div>
+              </li>
+            )}
           </ul>
         </div>
       </div>
       {children}
-      <Footer/>
+      <Footer />
     </div>
   );
 }

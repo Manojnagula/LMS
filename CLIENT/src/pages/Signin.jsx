@@ -101,7 +101,7 @@ function Signin() {
             />
           </div>
           <button className="mt-2 bg-yellow-600 hover:bg-yellow-800 transition-all ease-in-out duraration-300 cursor-pointer py-2 font-semibold text-lg">
-            Create Account
+            Log in
           </button>
           <p className="text-center ">
             Don't have an account?{" "}
