@@ -276,6 +276,32 @@ const updateUser = async function (req, res, next) {
   });
 };
 
+const contact = async function(req,res,next){
+  const {name,email,message} = req.body;
+  if(!name || !email || !message){
+    return next(new AppError("All fields are required"));
+  }
+  try {
+    const EMAIL = process.env.CONTACT_US_EMAIL;
+   const  subject = "Qwery submission by user."
+    const Message = JSON.stringify({
+      name,
+      email,
+      message
+    })
+    await sendEmail(EMAIL, subject, Message);
+    res.status(200).json({
+      success:true,
+      message : "Qwery submitted successfully."
+    })
+
+    
+  } catch (error) {
+    return next(new AppError(error.message, 400));
+
+  }
+
+}
 
 export {
   register,
@@ -286,5 +312,6 @@ export {
   forgotPassword,
   changePassword,
   updateUser,
+  contact
 }
 

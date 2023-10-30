@@ -9,7 +9,8 @@ import {
     forgotPassword,
     resetPassword,
     changePassword,
-    updateUser
+    updateUser,
+    contact
 } from './../controllers/user.controller.js';
 import {isLoggedIn} from'../middlewares/auth.middleware.js';
 
@@ -21,5 +22,6 @@ router.post('/reset',forgotPassword)
 router.post('/reset/:resetToken',resetPassword)
 router.post('/change-password',isLoggedIn,changePassword)
 router.put('/update',isLoggedIn,upload.single('avatar'),updateUser)
+router.post('/contact',contact)
 
 export default router;

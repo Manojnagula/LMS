@@ -30,7 +30,7 @@ function Contact() {
     }
 
     try {
-        const response = axiosInstance.post("/contact",userInput);
+        const response = axiosInstance.post("/users/contact",userInput);
         toast.promise(response,{
             loading: 'Submitting your Query',
             success: "Form submitted successfully",
@@ -59,7 +59,7 @@ function Contact() {
           noValidate
           className="flex flex-col items-center justify-center gap-2 w-[22rem]rounded-md text-white"
         >
-          <h1 className="text-3xl font-semibold">Contact Form</h1>
+          <h1 className="text-3xl px-9 mb-4 font-semibold"> Contact us Form </h1>
           <div className="flex flex-col w-full gap-1 font-semibold">
             <label htmlFor="name" className="text-xl font-semibold">
               NAME
