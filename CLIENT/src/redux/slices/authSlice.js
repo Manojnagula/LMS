@@ -8,6 +8,9 @@ const initialState = {
     data: localStorage.getItem("data") || {}
 }
 
+
+// Actions
+
 export const createAccount = createAsyncThunk("/auth/signup", async (data)=> {
     try {
         const response = axiosInstance.post("users/register",data);
@@ -28,6 +31,7 @@ export const createAccount = createAsyncThunk("/auth/signup", async (data)=> {
 export const login = createAsyncThunk("/auth/signin", async (data)=> {
     try {
         const response = axiosInstance.post("users/login",data);
+        console.log(response);
         toast.promise(response, {
             loading: 'Authenticating, please wait!',
             success:(data)=>{
@@ -60,6 +64,8 @@ export const logout = createAsyncThunk("/auth/logout", async ()=> {
     }
 })
 
+
+// this is reducer function
 const authSlice = createSlice({
     name: "auth",
     initialState,
@@ -73,6 +79,7 @@ const authSlice = createSlice({
             state.isLoggedin = true;
             state.role = action?.payload?.data?.user?.role;
             state.data = action?.payload?.data
+            console.log(action);
         })
         .addCase(logout.fulfilled, (state)=>{
             localStorage.clear();

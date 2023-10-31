@@ -314,4 +314,3 @@ export {
   updateUser,
   contact
 }
-
