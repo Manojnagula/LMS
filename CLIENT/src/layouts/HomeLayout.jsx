@@ -40,7 +40,7 @@ function HomeLayout({ children }) {
             <FiMenu
               onClick={changeWidth}
               size={"32px"}
-              className="font-bold text-white m-4"
+              className="font-bold hover:cursor-pointer text-white m-4"
             />
           </label>
         </div>

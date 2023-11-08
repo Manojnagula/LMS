@@ -31,7 +31,6 @@ export const createAccount = createAsyncThunk("/auth/signup", async (data)=> {
 export const login = createAsyncThunk("/auth/signin", async (data)=> {
     try {
         const response = axiosInstance.post("users/login",data);
-        console.log(response);
         toast.promise(response, {
             loading: 'Authenticating, please wait!',
             success:(data)=>{
@@ -79,7 +78,6 @@ const authSlice = createSlice({
             state.isLoggedin = true;
             state.role = action?.payload?.data?.user?.role;
             state.data = action?.payload?.data
-            console.log(action);
         })
         .addCase(logout.fulfilled, (state)=>{
             localStorage.clear();
