@@ -41,7 +41,7 @@ function CreateCourse() {
     setUserInput({ ...userInput, [name]: value });
   }
 
-  function onFormSubmit(e) {
+async  function onFormSubmit(e) {
     e.preventDefault();
     if (
       !userInput.title ||
@@ -53,7 +53,7 @@ function CreateCourse() {
       toast.error("All fields are mandatory");
       return;
     }
-    const response = dispatch(createNewCourse(userInput));
+    const response = await dispatch(createNewCourse(userInput));
     if (response?.payload?.success) {
       setUserInput({
         title: "",

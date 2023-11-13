@@ -7,16 +7,14 @@ import sendEmail from "../utils/sendEmail.js";
 const cookieOptions = {
   secure: true,
   maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
-  httpOnly: true
-}
+  httpOnly: true,
+};
 
 const register = async (req, res, next) => {
+  const { fullName, email, password, role } = req.body;
 
-  const { fullName, email, password,role} = req.body;
-
-console.log(fullName,email,password,role,req.file)
+  console.log(fullName, email, password, role, req.file);
   if (!password || !fullName || !email) {
-
     return next(new AppError("All fields are required", 400));
   }
   const userExists = await User.findOne({ email });
@@ -24,22 +22,20 @@ console.log(fullName,email,password,role,req.file)
   if (userExists) {
     return next(new AppError("Email already registered", 400));
   }
-    const user = await User.create({
-      fullName,
-      email,
-      password,
-      role,
-      avatar: {
-        public_id:email,
-        secure_url: "dummy"
-      }
-    },
-   );
-
-    if (!user) {
-      return next(new AppError('User registration failed', 400));
+  const user = await User.create({
+    fullName,
+    email,
+    password,
+    role,
+    avatar: {
+      public_id: email,
+      secure_url: "https://res.cloudinary.com/do92i5qrh/image/upload/v1699875381/depositphotos_137014128-stock-illustration-user-profile-icon_wadefk.webp",
     }
+  });
 
+  if (!user) {
+    return next(new AppError("User registration failed", 400));
+  }
 
   // TODO: uplolad user picture
 
@@ -88,7 +84,7 @@ console.log(fullName,email,password,role,req.file)
   });
 };
 
-const login = async (req, res,next) => {
+const login = async (req, res, next) => {
   const { email, password } = req.body;
 
   if (!email || !password) {
@@ -231,21 +227,21 @@ const changePassword = async function (req, res, next) {
 
 const updateUser = async function (req, res, next) {
   const { fullName } = req.body;
-  const {role} = req.body;
+  const { role } = req.body;
   const { id } = req.user;
   const user = await User.findById(id);
 
   if (!user) {
     return next(new AppError("User not exist", 400));
   }
-  if(role){
-    user.role=role;
+  if (role) {
+    user.role = role;
   }
   if (fullName) {
     user.fullName = fullName;
   }
 
-  if(req.file){
+  if (req.file) {
     await cloudinary.v2.uploader.destroy(user.avatar.public_id);
     try {
       const result = await cloudinary.v2.uploader.upload(req.file.path, {
@@ -276,32 +272,28 @@ const updateUser = async function (req, res, next) {
   });
 };
 
-const contact = async function(req,res,next){
-  const {name,email,message} = req.body;
-  if(!name || !email || !message){
+const contact = async function (req, res, next) {
+  const { name, email, message } = req.body;
+  if (!name || !email || !message) {
     return next(new AppError("All fields are required"));
   }
   try {
     const EMAIL = process.env.CONTACT_US_EMAIL;
-   const  subject = "Qwery submission by user."
+    const subject = "Qwery submission by user.";
     const Message = JSON.stringify({
       name,
       email,
-      message
-    })
+      message,
+    });
     await sendEmail(EMAIL, subject, Message);
     res.status(200).json({
-      success:true,
-      message : "Qwery submitted successfully."
-    })
-
-    
+      success: true,
+      message: "Qwery submitted successfully.",
+    });
   } catch (error) {
     return next(new AppError(error.message, 400));
-
   }
-
-}
+};
 
 export {
   register,
@@ -312,5 +304,5 @@ export {
   forgotPassword,
   changePassword,
   updateUser,
-  contact
-}
+  contact,
+};

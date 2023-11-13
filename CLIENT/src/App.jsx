@@ -13,6 +13,7 @@ import CourseList from "./pages/Course/CourseList";
 import CourseDescription from "./pages/Course/CourseDescription";
 import CreateCourse from "./pages/Course/CreateCourse";
 import RequireAuth from "./components/Auth/RequireAuth";
+import Profile from "./pages/User/Profile";
 
 function App() {
   return (
@@ -29,8 +30,14 @@ function App() {
       <Route element={<RequireAuth allowedRoles={["ADMIN"]} />}>
         <Route path="/course/create" element={<CreateCourse />} />
       </Route>
+      <Route element={<RequireAuth allowedRoles={["ADMIN","USER"]} />}>
+        <Route path="/user/profile" element={<Profile />} />
+      </Route>
 
       <Route path="*" element={<NotFound />} />
+
+
+
     </Routes>
   );
 }
