@@ -5,7 +5,7 @@ import axiosInstance from '../../config/axiosinstance'
 const initialState = {
     isLoggedin: localStorage.getItem("isLoggedin") || false,
     role : localStorage.getItem("role") || "",
-    data: localStorage.getItem("data") || {}
+    data: JSON.parse(localStorage.getItem("data")) || {}
 }
 
 
